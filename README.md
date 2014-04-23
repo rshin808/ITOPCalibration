@@ -1,7 +1,9 @@
 # ITOPCalibration  
 ITOP Calibration code for BeagleBone Black.  
 
-# BeagleBone Black revC (Debian 7.9)  
+# BeagleBone Black revC  
+Linux beaglebone 3.8.13-bone47
+2014-04-23  
 I2C and SPI drivers required (see INSTALLATION below)  
 
 # PINS  
