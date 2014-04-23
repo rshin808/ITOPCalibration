@@ -32,9 +32,12 @@ EN = None
 with open("EN", "rb") as ENFile:
     EN = bool(int(ENFile.read().split()[0]))
 
+# QUIT
+quit = False
+
 # Helper Functions
 def drf(enable = False):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(drf): Main Power Disabled"
     RFOFF()
    
     if enable == True:
@@ -168,6 +171,13 @@ def RFOFF():
     ledsOff()
 
 # Functions Users can call
+def quit(parameters = None):
+    """
+        Name:   quit
+        Desc:   This quits the driver.
+        Params: parameters (list)
+                    None
+    """
 def enable(parameters = None):
     """
         Name:   enable
@@ -232,7 +242,7 @@ def wgen(parameters = None):
         Params: parameters (list)
                     0:  enable (int)
     """
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(wgen): Main Power Disabled"
     assert len(parameters) == 1, "WGEN only takes one parameter"
     RFOFF()
     
@@ -247,7 +257,7 @@ def sine(parameters = None):
         Params: parameters (list)
                     0: enable (int)
     """
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(sine): Main Power Disabled"
     assert len(parameters) == 1, "SINE only takes one parameter"
     RFOFF()
 
@@ -262,14 +272,14 @@ def ler(parameters = None):
         Params: parameters (list)
                     0: enable (int)
     """
-    assert EN == True, "ERROR: Main Power Disabled"
-    assert len(parameters) == 1, "LBPM only takes one parameter"
+    assert EN == True, "ERROR(ler): Main Power Disabled"
+    assert len(parameters) == 1, "LER only takes one parameter"
     RFOFF()
 
     if int(parameters[0]) == 1:
         setRF(1, 1, 0)
         GPIO.output(PINS["LBPM_LED"], GPIO.HIGH)
-        print "LBPM Enabled"
+        print "LER Enabled"
 
 def her(parameters = None):
     """
@@ -278,17 +288,17 @@ def her(parameters = None):
         Params: parameters (list)
                 0: enable (list)
     """
-    assert EN == True, "ERROR: Main Power Disabled"
-    assert len(parameters) == 1, "HBPM only takes one parameter"
+    assert EN == True, "ERROR(her): Main Power Disabled"
+    assert len(parameters) == 1, "HER only takes one parameter"
     RFOFF()
     
     if int(parameters[0]) == 1:
         setRF(0, 0, 1)
         GPIO.output(PINS["HBPM_LED"], GPIO.HIGH)
-        print "HBPM Enabled"
+        print "HER Enabled"
 
 def aux(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert bool(EN) == True, "ERROR(aux): Main Power Disabled"
     assert len(parameters) == 1, "AUX only takes one parameter"
     RFOFF()
     
@@ -298,7 +308,7 @@ def aux(parameters = None):
         print "AUX Enabled"
 
 def extt(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(extt): Main Power Disabled"
     assert len(parameters) == 1, "EXTT only takes one parameter"
     RFOFF()
     
@@ -311,7 +321,7 @@ def extt(parameters = None):
 
 
 def ldt(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(ldt): Main Power Disabled"
     assert len(parameters) == 1, "LDT only takes one parameter"
     RFOFF()
     
@@ -323,7 +333,7 @@ def ldt(parameters = None):
         print "LDT Enabled"
 
 def master(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(master): Main Power Disabled"
     assert len(parameters) == 1, "MASTER only takes one parameter"
     RFOFF()
 
@@ -335,7 +345,7 @@ def master(parameters = None):
         print "MASTER Enabled"
 
 def lbatt(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(lbatt): Main Power Disabled"
     assert len(parameters) == 1, "LBATT only takes one parameter"
     assert float(parameters[0]) <= 31.5 and float(parameters[0]) >= 0, "LBATT out of range (0 to 31.5)"
     assert float(parameters[0]) % 0.5 == 0, "LBATT resolution is 0.5 dB"
@@ -343,7 +353,7 @@ def lbatt(parameters = None):
     print setLATT(float(parameters[0]))
 
 def rbatt(parameters = None):
-    assert EN == True, "ERROR: Main Power Disabled"
+    assert EN == True, "ERROR(rbatt): Main Power Disabled"
     assert len(parameters) == 1, "RBATT only takes one parameter"
     assert float(parameters[0]) <= 31.5 and float(parameters[0]) >= 0, "RBATT out of range (0 to 31.5)"
     assert float(parameters[0]) % 0.5 == 0, "RBATT resolution is 0.5 dB"
@@ -423,6 +433,7 @@ ITOP = {
     "LBATT"     :   lbatt,
     "RBATT"     :   rbatt,
     "HELP"      :   helpMenu,
+    "QUIT"      :   quit,
 }
 
 #enable()
@@ -442,9 +453,9 @@ else:
 """
 
 try:
-    while(True):
+    while(quit == False):
         try:
-            print "Enter a Command:"
+            print "Enter a Command ('HELP' for Help Menu):"
             cmd = raw_input().split()
             func = cmd[0]
             params = cmd[1:]
@@ -452,5 +463,9 @@ try:
             ITOP[func](params)
         except Exception, e:
             print e
+
 except KeyboardInterrupt, e:
+    with open("EN", "wb") as ENFile:
+        writer = csv.writer(ENFile)
+        writer.writerow([0])
     GPIO.cleanup()
