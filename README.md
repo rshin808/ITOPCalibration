@@ -68,7 +68,4 @@ Adafruit_BBIO is a BeagleBone IO Python library forked from Ben Croston's [RPI.G
 [Adafruit_BBIO Library](https://github.com/adafruit/adafruit-beaglebone-io-python)(MIT License) 
 
 # LICENSE  
-This version of the ITOPCalibration is released under the MIT License.   
-
-
-
+ITOPCalibration is released under the MIT License.   
