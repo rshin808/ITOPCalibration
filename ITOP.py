@@ -33,7 +33,7 @@ with open("EN", "rb") as ENFile:
     EN = bool(int(ENFile.read().split()[0]))
 
 # QUIT
-quit = False
+quitFlag = False
 
 # Helper Functions
 def drf(enable = False):
@@ -178,6 +178,10 @@ def quit(parameters = None):
         Params: parameters (list)
                     None
     """
+    global quitFlag
+    quitFlag = True
+    disable()
+
 def enable(parameters = None):
     """
         Name:   enable
@@ -186,6 +190,8 @@ def enable(parameters = None):
         Params: parameters (list)
                     None
     """
+    global EN
+
     for key in PINS.keys():
         GPIO.output(PINS[key], GPIO.LOW)
     
@@ -193,6 +199,8 @@ def enable(parameters = None):
 
     with open("EN", "wb") as ENFile:
         ENFile.write("1")
+
+    EN = True
 
     time.sleep(1)
 
@@ -203,12 +211,12 @@ def enable(parameters = None):
     pll._init()
 
     print "Main Power Enabled"
-    print "Note: When finished use 'close' or 'shutdown'"
+    print "Note: When finished use 'disable' or 'quit'"
 
-def close(parameters = None):
+def disable(parameters = None):
     """
-        Name:   close
-        Desc:   This closes the Main Power for the board.
+        Name:   disable 
+        Desc:   This disables the Main Power for the board.
         Params: parameters (list)
                     None
     """
@@ -232,7 +240,7 @@ def shutdown(parameters = None):
         Params: parameters (list)
                     None
     """
-    close()
+    disable()
     subprocess.call(["shutdown", "-h", "now"])
 
 def wgen(parameters = None):
@@ -376,7 +384,7 @@ def helpMenu(parameters = None):
         print " fnumber |    function"
         print "---------------------------"
         print "     0   |    ENABLE"
-        print "     1   |    CLOSE"
+        print "     1   |    DISABLE"
         print "     2   |    WGEN [enable]"
         print "     3   |    SINE [enable]"
         print "     4   |    LBPM [enable]"
@@ -388,11 +396,12 @@ def helpMenu(parameters = None):
         print "    10   |    LBATT [value]"
         print "    11   |    RBATT [value]"
         print "    12   |    HELP [fnumber]"
+        print "    13   |    SHUTDOWN"
         print ""
     elif parameters == ["0"]:
         print str(enable.__doc__)
     elif parameters == ["1"]:
-        print str(close.__doc__)
+        print str(disable.__doc__)
     elif parameters == ["2"]:
         print str(wgen.__doc__)
     elif parameters == ["3"]:
@@ -415,12 +424,14 @@ def helpMenu(parameters = None):
         print str(rbatt.__doc__)
     elif parameters == ["12"]:
         print str(helpMenu.__doc__)
+    elif parameters == ["13"]:
+        print str(shutdown.__doc__)
     else:
         print "Not a valid parameter"
 
 ITOP = {
     "ENABLE"    :   enable,
-    "CLOSE"     :   close,
+    "DISABLE"     :   disable,
     "SHUTDOWN"  :   shutdown,     
     "WGEN"      :   wgen,
     "SINE"      :   sine,
@@ -453,7 +464,7 @@ else:
 """
 
 try:
-    while(quit == False):
+    while(quitFlag == False):
         try:
             print "Enter a Command ('HELP' for Help Menu):"
             cmd = raw_input().split()
@@ -463,9 +474,10 @@ try:
             ITOP[func](params)
         except Exception, e:
             print e
+    with open("EN", "wb") as ENFile:
+        ENFile.write("0")
 
 except KeyboardInterrupt, e:
     with open("EN", "wb") as ENFile:
-        writer = csv.writer(ENFile)
-        writer.writerow([0])
+       ENFile.write("0")
     GPIO.cleanup()
