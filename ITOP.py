@@ -17,7 +17,7 @@ from PINS import *
 
 # Initialize GPIO
 for key in PINS.keys():
-    GPIO.setup(PINS[key], GPIO.OUT, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(PINS[key], GPIO.OUT)
 
 # Check if MAINPW_EN is High
 EN = None
@@ -128,7 +128,7 @@ def setHATT(value = 0):
         else:
             b += "1"
     
-    b += 1
+    b += l
     
     setHBATT(int(b[0]), int(b[1]), int(b[2]), int(b[3]), int(b[4]), int(b[5]))  
 
@@ -333,8 +333,7 @@ def lbatt(parameters = None):
 def rbatt(parameters = None):
     assert EN == True, "ERROR: Main Power Disabled"
     assert len(parameters) == 1, "RBATT only takes one parameter"
-    assert float(parameters[0]) not in valid, "RBATT only "
-    assert float(parameters[0]) <= 31.5 and float(paramters[0]) >= 0, "RBATT out of range (0 to 31.5)"
+    assert float(parameters[0]) <= 31.5 and float(parameters[0]) >= 0, "RBATT out of range (0 to 31.5)"
     assert float(parameters[0]) % 0.5 == 0, "RBATT resolution is 0.5 dB"
 
     print setHATT(float(parameters[0]))
@@ -415,7 +414,7 @@ ITOP = {
 }
 
 #enable()
-
+"""
 if len(sys.argv) <= 1:
     print ""
     print "Missing Parameters"
@@ -428,3 +427,15 @@ else:
     parameters = sys.argv[2:]
 
     ITOP[function](parameters)
+"""
+
+try:
+    while(True):
+        print "Enter a Command:"
+        cmd = raw_input().split()
+        func = cmd[0]
+        params = cmd[1:]
+
+        ITOP[func](params)
+except KeyboardInterrupt, e:
+    GPIO.cleanup()
