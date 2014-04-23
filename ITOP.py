@@ -25,9 +25,7 @@ for key in PINS.keys():
 
 # Initialize BUS
 address = 0x70
-busNum = 1
-i2c = Adafruit_I2C(address, busNum)
-pll = si5338POST(i2c = i2c, regs = VCOREGS)
+busNum = 2
 
 # Check if MAINPW_EN is High
 EN = None
@@ -189,6 +187,8 @@ def enable(parameters = None):
     time.sleep(1)
 
     aux([1])
+    i2c = Adafruit_I2C(address, busNum)
+    pll = si5338POST(i2c = i2c, regs = VCOREGS)
     
     pll._init()
 
