@@ -471,13 +471,8 @@ try:
         try:
             print "Enter a Command ('help' for Help Menu):"
             cmd = raw_input().split()
-            func = cmd[0]
+            func = str(cmd[0]).lower()
             
-            try:
-                func = func.tolower()
-            except:
-                pass
-
             params = cmd[1:]
 
             ITOP[func](params)
