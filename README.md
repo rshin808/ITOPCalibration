@@ -1,8 +1,8 @@
 # ITOPCalibration  
 ITOP Calibration code for BeagleBone Black.  
 
-# BeagleBone Black revC  
-I2C and SPI drivers required  
+# BeagleBone Black revC (Debian 7.9)  
+I2C and SPI drivers required (see INSTALLATION below)  
 
 # PINS  
 ## P8 HEADER  
@@ -48,4 +48,27 @@ SPI_CS2# = P9_28
 SPI_SD0 = P9_30  
 DIA_Iin = P9_40  
 SPI_CS1# = P9_42  
+
+# INSTALLATION  
+sudo ntpdate pool.ntp.org  
+
+sudo apt-get update  
+sudo apt-get install build-essential python-dev python-setuptools python-pip python-smbus -y  
+sudo pip install Adafruit_BBIO  
+
+git clone https://github.com/rshin808/ITOPCalibration  
+    or download as ZIP and extract
+
+edit /etc/rc.local  
+   echo BB-I2C1 > /sys/devices/bone_capemgr.9/slots  
+   ntpdate pool.ntp.org  
+
+# CREDITS  
+Adafruit_BBIO is a BeagleBone IO Python library forked from Ben Croston's [RPI.GPIO library](https://sourceforge.net/projects/raspberry-gpio-python)(MIT License).  
+[Adafruit_BBIO Library](https://github.com/adafruit/adafruit-beaglebone-io-python)(MIT License) 
+
+# LICENSE  
+This version of the ITOPCalibration is released under the MIT License.   
+
+
 

@@ -255,9 +255,9 @@ def sine(parameters = None):
         setRF(1, 0, 0)
         print "SINE Enabled"
 
-def lbpm(parameters = None):
+def ler(parameters = None):
     """
-        Name:   lbpm
+        Name:   ler 
         Desc:   This enables LBPM.
         Params: parameters (list)
                     0: enable (int)
@@ -271,9 +271,9 @@ def lbpm(parameters = None):
         GPIO.output(PINS["LBPM_LED"], GPIO.HIGH)
         print "LBPM Enabled"
 
-def hbpm(parameters = None):
+def her(parameters = None):
     """
-        Name:   hbpm
+        Name:   her 
         Desc:   This enables HBPM.
         Params: parameters (list)
                 0: enable (list)
@@ -388,9 +388,9 @@ def helpMenu(parameters = None):
     elif parameters == ["3"]:
         print str(sine.__doc__)
     elif parameters == ["4"]:
-        print str(lbpm.__doc__)
+        print str(ler.__doc__)
     elif parameters == ["5"]:
-        print str(hbpm.__doc__)
+        print str(her.__doc__)
     elif parameters == ["6"]:
         print str(aux.__doc__)
     elif parameters == ["7"]:
@@ -414,8 +414,8 @@ ITOP = {
     "SHUTDOWN"  :   shutdown,     
     "WGEN"      :   wgen,
     "SINE"      :   sine,
-    "LBPM"      :   lbpm,
-    "HBPM"      :   hbpm,
+    "LER"       :   ler,
+    "HER"       :   her,
     "AUX"       :   aux,
     "EXTT"      :   extt,
     "LDT"       :   ldt,
