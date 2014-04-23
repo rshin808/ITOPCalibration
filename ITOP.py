@@ -171,9 +171,9 @@ def RFOFF():
     ledsOff()
 
 # Functions Users can call
-def quit(parameters = None):
+def quitF(parameters = None):
     """
-        Name:   quit
+        Name:   quitF
         Desc:   This quits the driver.
         Params: parameters (list)
                     None
@@ -396,7 +396,8 @@ def helpMenu(parameters = None):
         print "    10   |    LBATT [value]"
         print "    11   |    RBATT [value]"
         print "    12   |    HELP [fnumber]"
-        print "    13   |    SHUTDOWN"
+        print "    13   |    QUIT"
+        print "    14   |    SHUTDOWN"
         print ""
     elif parameters == ["0"]:
         print str(enable.__doc__)
@@ -425,26 +426,28 @@ def helpMenu(parameters = None):
     elif parameters == ["12"]:
         print str(helpMenu.__doc__)
     elif parameters == ["13"]:
+        print str(quitF.__doc__)
+    elif parameters == ["14"]:
         print str(shutdown.__doc__)
     else:
         print "Not a valid parameter"
 
 ITOP = {
-    "ENABLE"    :   enable,
-    "DISABLE"     :   disable,
-    "SHUTDOWN"  :   shutdown,     
-    "WGEN"      :   wgen,
-    "SINE"      :   sine,
-    "LER"       :   ler,
-    "HER"       :   her,
-    "AUX"       :   aux,
-    "EXTT"      :   extt,
-    "LDT"       :   ldt,
-    "MASTER"    :   master,
-    "LBATT"     :   lbatt,
-    "RBATT"     :   rbatt,
-    "HELP"      :   helpMenu,
-    "QUIT"      :   quit,
+    "enable"    :   enable,
+    "disable"   :   disable,
+    "shutdown"  :   shutdown,     
+    "wgen"      :   wgen,
+    "sine"      :   sine,
+    "ler"       :   ler,
+    "her"       :   her,
+    "aux"       :   aux,
+    "extt"      :   extt,
+    "ldt"       :   ldt,
+    "master"    :   master,
+    "lbatt"     :   lbatt,
+    "rbatt"     :   rbatt,
+    "help"      :   helpMenu,
+    "quit"      :   quitF,
 }
 
 #enable()
@@ -466,9 +469,15 @@ else:
 try:
     while(quitFlag == False):
         try:
-            print "Enter a Command ('HELP' for Help Menu):"
+            print "Enter a Command ('help' for Help Menu):"
             cmd = raw_input().split()
             func = cmd[0]
+            
+            try:
+                func = func.tolower()
+            except:
+                pass
+
             params = cmd[1:]
 
             ITOP[func](params)
