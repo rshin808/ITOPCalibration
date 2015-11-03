@@ -2,6 +2,7 @@
 ITOP Calibration code for BeagleBone Black.
 
 # BeagleBone Black revC
+I2C and SPI drivers required
 
 # PINS
 ## P8 HEADER
