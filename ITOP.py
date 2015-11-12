@@ -431,11 +431,14 @@ else:
 
 try:
     while(True):
-        print "Enter a Command:"
-        cmd = raw_input().split()
-        func = cmd[0]
-        params = cmd[1:]
+        try:
+            print "Enter a Command:"
+            cmd = raw_input().split()
+            func = cmd[0]
+            params = cmd[1:]
 
-        ITOP[func](params)
+            ITOP[func](params)
+        except Exception, e:
+            print e
 except KeyboardInterrupt, e:
     GPIO.cleanup()
