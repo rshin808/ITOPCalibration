@@ -13,11 +13,19 @@ import sys
 import time
 import subprocess 
 import Adafruit_BBIO.GPIO as GPIO
+from Adafruit_I2C import Adafruit_I2C
 from PINS import *
+from si5338POST import *
+from REGS import *
+
 
 # Initialize GPIO
 for key in PINS.keys():
     GPIO.setup(PINS[key], GPIO.OUT)
+
+# Initialize BUS
+address = 0x70
+busNum = 2
 
 # Check if MAINPW_EN is High
 EN = None
@@ -179,6 +187,10 @@ def enable(parameters = None):
     time.sleep(1)
 
     aux([1])
+    i2c = Adafruit_I2C(address, busNum)
+    pll = si5338POST(i2c = i2c, regs = VCOREGS)
+    
+    pll._init()
 
     print "Main Power Enabled"
     print "Note: When finished use 'close' or 'shutdown'"
