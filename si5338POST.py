@@ -1,5 +1,12 @@
-class si5338POST:
+"""
+    Name:   si5338POST.py
+    By:     Reed Shinsato
+    Date:   8 February 2016
+    Rev:    -   
+    Desc:   This is a driver for the si5338 PLL after it has been configured by Clock Builder. This has also been adapted for the BeagleBone Black.
 
+"""
+class si5338POST:
     def __init__(self, option = False, i2c = None, regs = None, interrupt = None, gpio = None):
         self._option = option
         self._BUS = i2c
@@ -57,6 +64,7 @@ class si5338POST:
                                 
     
         self._GPIO.setup(self._interrupt, self._GPIO.IN)
+
     def check(self):
         if self._GPIO.input(self._interrupt) == True:
             print "Warning LoL"

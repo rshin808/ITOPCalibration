@@ -24,7 +24,8 @@ for key in PINS.keys():
 
 # Initialize BUS
 address = 0x70
-i2c = Adafruit_I2C(address, 1)
+busNum = 1
+i2c = Adafruit_I2C(address, busNum)
 pll = si5338POST(i2c = i2c, regs = REGS, gpio = GPIO)
 
 # Check if MAINPW_EN is High
