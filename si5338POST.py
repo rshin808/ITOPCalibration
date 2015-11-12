@@ -7,13 +7,10 @@
 
 """
 class si5338POST:
-    def __init__(self, option = False, i2c = None, regs = None, interrupt = None, gpio = None):
+    def __init__(self, option = False, i2c = None, regs = None):
         self._option = option
         self._BUS = i2c
         self._REGS = regs
-        self._interrupt = interrupt
-        self._GPIO = gpio
-        self._GPIO.setmode(gpio.BCM)
         self._init()
     
     def _init(self):    
@@ -62,14 +59,5 @@ class si5338POST:
             self._BUS.write8(self._REGS["ENOUTS"], 0x0C)
             self._BUS.write8(self._REGS["PLLWPASS"], 0x00)
                                 
-    
-        self._GPIO.setup(self._interrupt, self._GPIO.IN)
-
-    def check(self):
-        if self._GPIO.input(self._interrupt) == True:
-            print "Warning LoL"
-            return True
-        else:
-            return False         
     
     
