@@ -48,3 +48,4 @@ SPI_CS2# = P9_28
 SPI_SD0 = P9_30  
 DIA_Iin = P9_40  
 SPI_CS1# = P9_42  
+
