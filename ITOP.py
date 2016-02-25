@@ -4,7 +4,7 @@
     Name:   ITOP.py
     By  :   Reed Shinsato
     Date:   25 January 2016
-    Rev:    -
+    Rev:    24 February 2016
     Desc:   This holds the scripts for running the ITOP Calibration module.
 """
 
@@ -37,7 +37,7 @@ quitFlag = False
 
 # Helper Functions
 def drf(enable = False):
-    assert EN == True, "ERROR(drf): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(drf): Main Power Disabled"
     RFOFF()
    
     if enable == True:
@@ -220,9 +220,13 @@ def disable(parameters = None):
         Params: parameters (list)
                     None
     """
+    global EN
+
     for key in PINS.keys():
         if key != "MAINPW_EN":
             GPIO.output(PINS[key], GPIO.LOW)
+
+    EN = False
 
     time.sleep(1)
     GPIO.output(PINS["MAINPW_EN"], GPIO.LOW)
@@ -250,7 +254,7 @@ def wgen(parameters = None):
         Params: parameters (list)
                     0:  enable (int)
     """
-    assert EN == True, "ERROR(wgen): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(wgen): Main Power Disabled"
     assert len(parameters) == 1, "WGEN only takes one parameter"
     RFOFF()
     
@@ -265,7 +269,7 @@ def sine(parameters = None):
         Params: parameters (list)
                     0: enable (int)
     """
-    assert EN == True, "ERROR(sine): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(sine): Main Power Disabled"
     assert len(parameters) == 1, "SINE only takes one parameter"
     RFOFF()
 
@@ -280,7 +284,7 @@ def ler(parameters = None):
         Params: parameters (list)
                     0: enable (int)
     """
-    assert EN == True, "ERROR(ler): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(ler): Main Power Disabled"
     assert len(parameters) == 1, "LER only takes one parameter"
     RFOFF()
 
@@ -296,7 +300,7 @@ def her(parameters = None):
         Params: parameters (list)
                 0: enable (list)
     """
-    assert EN == True, "ERROR(her): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(her): Main Power Disabled"
     assert len(parameters) == 1, "HER only takes one parameter"
     RFOFF()
     
@@ -316,7 +320,7 @@ def aux(parameters = None):
         print "AUX Enabled"
 
 def extt(parameters = None):
-    assert EN == True, "ERROR(extt): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(extt): Main Power Disabled"
     assert len(parameters) == 1, "EXTT only takes one parameter"
     RFOFF()
     
@@ -329,7 +333,7 @@ def extt(parameters = None):
 
 
 def ldt(parameters = None):
-    assert EN == True, "ERROR(ldt): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(ldt): Main Power Disabled"
     assert len(parameters) == 1, "LDT only takes one parameter"
     RFOFF()
     
@@ -341,7 +345,7 @@ def ldt(parameters = None):
         print "LDT Enabled"
 
 def master(parameters = None):
-    assert EN == True, "ERROR(master): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(master): Main Power Disabled"
     assert len(parameters) == 1, "MASTER only takes one parameter"
     RFOFF()
 
@@ -353,7 +357,7 @@ def master(parameters = None):
         print "MASTER Enabled"
 
 def lbatt(parameters = None):
-    assert EN == True, "ERROR(lbatt): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(lbatt): Main Power Disabled"
     assert len(parameters) == 1, "LBATT only takes one parameter"
     assert float(parameters[0]) <= 31.5 and float(parameters[0]) >= 0, "LBATT out of range (0 to 31.5)"
     assert float(parameters[0]) % 0.5 == 0, "LBATT resolution is 0.5 dB"
@@ -361,7 +365,7 @@ def lbatt(parameters = None):
     print setLATT(float(parameters[0]))
 
 def rbatt(parameters = None):
-    assert EN == True, "ERROR(rbatt): Main Power Disabled"
+    assert bool(EN) == True, "ERROR(rbatt): Main Power Disabled"
     assert len(parameters) == 1, "RBATT only takes one parameter"
     assert float(parameters[0]) <= 31.5 and float(parameters[0]) >= 0, "RBATT out of range (0 to 31.5)"
     assert float(parameters[0]) % 0.5 == 0, "RBATT resolution is 0.5 dB"
@@ -432,6 +436,8 @@ def helpMenu(parameters = None):
     else:
         print "Not a valid parameter"
 
+
+# ITOP Function list
 ITOP = {
     "enable"    :   enable,
     "disable"   :   disable,
@@ -450,22 +456,7 @@ ITOP = {
     "quit"      :   quitF,
 }
 
-#enable()
-"""
-if len(sys.argv) <= 1:
-    print ""
-    print "Missing Parameters"
-    print "\tITOP.py [function] [parameters]"
-    print "For help use:"
-    print "\tITOP.py HELP" 
-    print ""
-else:
-    function = sys.argv[1]
-    parameters = sys.argv[2:]
-
-    ITOP[function](parameters)
-"""
-
+# Main
 try:
     while(quitFlag == False):
         try:

@@ -1,3 +1,12 @@
+"""
+    Name: REGS.py
+    By:   Reed Shinsato
+    Date: 24 February 2016
+    Rev:  -
+    Desc: This holds the VC0 Register numbers
+    
+"""
+
 VCOREGS = {
     "ENOUTS" : 230,
     "PLLWPASS" : 6,

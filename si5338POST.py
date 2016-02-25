@@ -7,6 +7,13 @@
 
 """
 class si5338POST:
+    """
+        Name:   si5338POST
+	Desc:   This is the class for configuring the si5338 chip after defaults have been loaded.
+	Params: option (bool), This is the option for the configuration.
+	        i2c (object), This is the i2c object
+		regs (dict), This is the dictionary containing the register numbers that need to be configured.  
+    """
     def __init__(self, option = False, i2c = None, regs = None):
         self._option = option
         self._BUS = i2c
@@ -22,7 +29,7 @@ class si5338POST:
         self._BUS.write8(42, 0x23)
 
         # Setting PLL bypass
-#        self._BUS.write8(31, 0x08)        
+        # self._BUS.write8(31, 0x08)        
         
         if self._option == False:
             self._BUS.write8(self._REGS["ENOUTS"], 0x10)
